@@ -8,7 +8,7 @@ Requisites
 ----------
 
 * python 2.7
-* python-sql
+* python-sql http://code.google.com/p/python-sql/
 
 Usages
 ------
