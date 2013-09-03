@@ -4,15 +4,15 @@ import sys
 import os
 import unittest
 import doctest
-
 import sql
 
 here = os.path.dirname(__file__)
-#readme = os.path.normpath(os.path.join(here, '..', '..', 'README'))
+readme = os.path.normpath(os.path.join(here, '..', '..', 'README'))
 
 
 def test_suite():
-    suite = additional_tests()
+    suite = unittest.TestSuite()
+#    additional_tests(suite)
     loader = unittest.TestLoader()
     for fn in os.listdir(here):
         if fn.startswith('test') and fn.endswith('.py'):
@@ -22,13 +22,18 @@ def test_suite():
             suite.addTests(loader.loadTestsFromModule(module))
     return suite
 
-def additional_tests():
-    suite = unittest.TestSuite()
+
+def additional_tests(suite):
     for mod in (sql,):
         suite.addTest(doctest.DocTestSuite(mod))
-#    if os.path.isfile(readme):
-#        suite.addTest(doctest.DocFileSuite(readme, module_relative=False,
-#                tearDown=lambda t: sql.Flavor.set(sql.Flavor())))
+    if os.path.isfile(readme):
+        suite.addTest(
+            doctest.DocFileSuite(
+                readme,
+                module_relative=False,
+                tearDown=lambda t: sql.Flavor.set(sql.Flavor())
+            )
+        )
     return suite
 
 
@@ -38,6 +43,14 @@ def main():
     runner.run(suite)
 
 if __name__ == '__main__':
-    sys.path.insert(0, os.path.dirname(os.path.dirname(
-                os.path.dirname(os.path.abspath(__file__)))))
+    sys.path.insert(
+        0,
+        os.path.dirname(
+            os.path.dirname(
+                os.path.dirname(
+                    os.path.abspath(__file__)
+                )
+            )
+        )
+    )
     main()
