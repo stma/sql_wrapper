@@ -18,6 +18,7 @@ Usages
   A cursor on a data will be available in the variable **data** (kw['data'])
 
 ```python
+from sql import Table
 import dbretriever as db
 
 query = Table('cars').select()
