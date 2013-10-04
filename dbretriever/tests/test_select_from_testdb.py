@@ -15,7 +15,7 @@ class TestSelect(unittest.TestCase):
     * user information should be updated inside connection dict
 
     '''
-    item = 'audi'
+    item = 'Audi'
     query = Table('cars').select()
     connection = {
         'name': 'test_pool',
@@ -27,33 +27,30 @@ class TestSelect(unittest.TestCase):
     }
 
     def test_select_cursor(self):
-        @db.fetch_data_from(self.query, self.connection)
-        def test_fv(data):
-            return data
+        @db.fetch_data_from(self.connection)
+        def test_fv(data, query):
+            return data.fetchone()
 
-        data = test_fv()
-        row = data.fetchone()
+        row = test_fv(query = self.query)
         assert row[1] == self.item, \
             'wrong data: orig|{}, got|{}'.format(self.item, row[1])
 
     def test_select_fatch_all(self):
-        @db.fetch_data_from(self.query, self.connection)
-        def test_fv(data):
-            return data
+        @db.fetch_data_from(self.connection)
+        def test_fv(data, query):
+            return data.fetchall()
 
-        data = test_fv()
-        rows = data.fetchall()
-        assert len(rows) == 1, "wrong data length"
+        rows = test_fv(query = self.query)
+        assert len(rows) == 3, "wrong data length"
         assert rows[0][1] == self.item, \
             'wrong data: orig|{}, got|{}'.format(self.item, rows[0][1])
 
     def test_select_to_specified_variable(self):
-        @db.fetch_data_from(self.query, self.connection, into='d')
-        def test_fv(d):
-            return d
+        @db.fetch_data_from(self.connection, into='d')
+        def test_fv(d, query):
+            return d.fetchall()
 
-        data = test_fv()
-        rows = data.fetchall()
-        assert len(rows) == 1, "wrong data length"
+        rows = test_fv(query = self.query)
+        assert len(rows) == 3, "wrong data length"
         assert rows[0][1] == self.item, \
             'wrong data: orig|{}, got|{}'.format(self.item, rows[0][1])
