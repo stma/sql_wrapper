@@ -21,5 +21,6 @@ relational databases by queries writen in python-sql.",
     py_modules=["sql_wrapper"],
     install_requires=[
         "python-sql==0.2",
+        "psycopg2==2.5.1",
     ],
 )
