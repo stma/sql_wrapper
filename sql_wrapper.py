@@ -1,14 +1,11 @@
-#This file is part of dbretriever. The COPYRIGHT file at the top level of
+#This file is part of sql_wrapper. The COPYRIGHT file at the top level of
 #this repository contains the full copyright notices and license terms.
-
-__version__ = '0.1'
-__all__ = ['fetch_data_from']
 
 from sql import Select
 from functools import wraps
 
 
-def die_unless_select(query):
+def __die_unless_select(query):
     assert isinstance(query, Select), "not a select"
 
 
@@ -24,7 +21,7 @@ def fetch_data_from(
             db_connection = DbConnection.getConnection(connection)
             with db_connection.cursor() as data_pointer:
                 query = kwargs.get('query', None)
-                die_unless_select(query)
+                __die_unless_select(query)
                 data_pointer.execute(*tuple(query))
                 if get_cursor:
                     kwargs[into] = data_pointer
